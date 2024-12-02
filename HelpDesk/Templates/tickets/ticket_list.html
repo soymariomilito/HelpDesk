@@ -1,0 +1,80 @@
+{% extends "base.html" %}  
+
+{% block title %}Lista de Tickets{% endblock %} 
+
+{% block content %}  
+    <h1>Lista de Tickets</h1>
+    
+     <!-- Formulario de filtro -->
+     <form method="get" class="form-inline mb-3">
+        {{ form.titulo }}
+        {{ form.estado }}
+        {{ form.prioridad }}
+        {{ form.ubicacion }}
+        {{ form.responsable }}
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+     <!-- Tabla con casos -->
+    <table class="table table-striped table-hover table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Asunto</th>
+                <th>Estado</th>
+                <th>Prioridad</th>
+                <th>Ubicación</th>
+                <th>Responsable</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in pagina_actual %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.asunto }}</td>
+                    <td>{{ ticket.get_estado_display }}</td>
+                    <td>{{ ticket.get_prioridad_display }}</td>
+                    <td>{{ ticket.get_ubicacion_display }}</td>
+                    <td>
+                        {% if ticket.responsable %}
+                            {{ ticket.responsable.username }}
+                        {% else %}
+                            Sin asignar
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-primary btn-sm">Ver detalles</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+     <!-- Navegacion por paginas -->
+    <nav aria-label="Paginas">
+        <ul class="pagination">
+            {% if pagina_actual.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Primera</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagina_actual.previous_page_number }}{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Anterior</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ pagina_actual.number }} de {{ pagina_actual.paginator.num_pages }}</span>
+            </li>
+
+            {% if pagina_actual.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagina_actual.next_page_number }}{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Última</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <a href="{% url 'new_ticket' %}" class="btn btn-success mb-3">Crear Nuevo Ticket</a>
+{% endblock %}
