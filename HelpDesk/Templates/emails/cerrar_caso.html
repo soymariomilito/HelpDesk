@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            background-color: #000000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ ticket.get_estado_display }}</h1>
+    </div>
+    <div class="content">
+        <p>Hola,</p>
+        <p>Hemos procedido al cierre de su solicitud con ID <strong>{{ ticket.id }}</strong> y asunto <strong>{{ ticket.asunto }}</strong> </p>
+        <p><strong>Solucion:</strong> {{ ticket.solucion }}</p>
+        <p>Gracias por contactarnos.</p>
+
+        {% include "emails/firma.html" %}
+    </div>
+</body>
+</html>

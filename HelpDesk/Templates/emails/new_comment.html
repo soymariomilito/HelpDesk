@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <p>Hola,</p>
+        <p>Realizaron un nuevo comentario en tu ticket con ID <strong>{{ ticket.id }}</strong></p>
+        <p>Asunto: {{ ticket.asunto }}</p>
+        <p>Descripción: {{ ticket.descripcion }}</p>
+        <p>Gracias por contactarnos.</p>
+
+        {% include "emails/firma.html" %}
+    </div>
+</body>
+</html>

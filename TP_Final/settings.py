@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-99f65x6@c7mqok*y+ixu@tc3uq(2u*i(y!a*^)aj_5(8)00_7(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['outletnew47.ddns.net']
 
 
 # Application definition
@@ -131,3 +132,20 @@ LOGIN_URL = '/login/'  # Esta es la URL a la que se redirigirá a los usuarios n
 LOGIN_REDIRECT_URL = '/'  # Redirige al usuario a la página principal después de iniciar sesión
 LOGOUT_REDIRECT_URL = '/login/'  # Redirige a la página de inicio de sesión después de cerrar sesión
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+#Envío de mails
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+# Configurar el tiempo de expiración del token en segundos (por ejemplo, 24 horas)
+PASSWORD_RESET_TIMEOUT = 84600
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Backend predeterminado de Django
+]
+
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
+USE_TZ = True

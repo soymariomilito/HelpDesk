@@ -18,20 +18,98 @@
     <table class="table table-striped table-hover table table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Asunto</th>
-                <th>Estado</th>
-                <th>Prioridad</th>
-                <th>Ubicación</th>
-                <th>Responsable</th>
-                <th>Detalles</th>
+                <th>
+                    <a href="?sort=id&order={% if sort_param == 'id' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        ID
+                        {% if sort_param == 'id' %}
+                            {% if order == 'desc' %}
+                                &#9660; <!-- Flecha hacia abajo -->
+                            {% else %}
+                                &#9650; <!-- Flecha hacia arriba -->
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=asunto&order={% if sort_param == 'asunto' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        Asunto
+                        {% if sort_param == 'asunto' %}
+                            {% if order == 'desc' %}
+                                &#9660;
+                            {% else %}
+                                &#9650;
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=estado&order={% if sort_param == 'estado' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        Estado
+                        {% if sort_param == 'estado' %}
+                            {% if order == 'desc' %}
+                                &#9660;
+                            {% else %}
+                                &#9650;
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=prioridad&order={% if sort_param == 'prioridad' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        Prioridad
+                        {% if sort_param == 'prioridad' %}
+                            {% if order == 'desc' %}
+                                &#9660;
+                            {% else %}
+                                &#9650;
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=ubicacion&order={% if sort_param == 'ubicacion' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        Ubicación
+                        {% if sort_param == 'ubicacion' %}
+                            {% if order == 'desc' %}
+                                &#9660;
+                            {% else %}
+                                &#9650;
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=responsable&order={% if sort_param == 'responsable' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        Responsable
+                        {% if sort_param == 'responsable' %}
+                            {% if order == 'desc' %}
+                                &#9660;
+                            {% else %}
+                                &#9650;
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="?sort=fecha_creacion&order={% if sort_param == 'fecha_creacion' and order == 'desc' %}asc{% else %}desc{% endif %}{% for key, value in request.GET.items %}{% if key != 'sort' and key != 'order' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" style="color: inherit; text-decoration: none;">
+                        Fecha
+                        {% if sort_param == 'fecha_creacion' %}
+                            {% if order == 'desc' %}
+                                &#9660; <!-- Flecha hacia abajo -->
+                            {% else %}
+                                &#9650; <!-- Flecha hacia arriba -->
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                </th>
             </tr>
         </thead>
+        
         <tbody>
             {% for ticket in pagina_actual %}
-                <tr>
+                <tr onclick= "window.location.href='{% url 'ticket_detail' ticket.id %}';" style="cursor: pointer;">
                     <td>{{ ticket.id }}</td>
-                    <td>{{ ticket.asunto }}</td>
+                    <td class="text-truncate" style="max-width: 300px;">{{ ticket.asunto }}</td>
                     <td>{{ ticket.get_estado_display }}</td>
                     <td>{{ ticket.get_prioridad_display }}</td>
                     <td>{{ ticket.get_ubicacion_display }}</td>
@@ -42,9 +120,7 @@
                             Sin asignar
                         {% endif %}
                     </td>
-                    <td>
-                        <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-primary btn-sm">Ver detalles</a>
-                    </td>
+                    <td>{{ ticket.fecha_creacion|date:"d/m/Y H:i" }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -55,10 +131,10 @@
         <ul class="pagination">
             {% if pagina_actual.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page=1{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Primera</a>
+                    <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Primera</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagina_actual.previous_page_number }}{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Anterior</a>
+                    <a class="page-link" href="?page={{ pagina_actual.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Anterior</a>
                 </li>
             {% endif %}
 
@@ -68,10 +144,10 @@
 
             {% if pagina_actual.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagina_actual.next_page_number }}{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Siguiente</a>
+                    <a class="page-link" href="?page={{ pagina_actual.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Siguiente</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% if request.GET.titulo %}&titulo={{ request.GET.titulo }}{% endif %}{% if request.GET.ubicacion %}&ubicacion={{ request.GET.ubicacion }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.prioridad %}&prioridad={{ request.GET.prioridad }}{% endif %}">Última</a>
+                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Última</a>
                 </li>
             {% endif %}
         </ul>

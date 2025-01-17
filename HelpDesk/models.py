@@ -50,6 +50,9 @@ class Ticket(models.Model):
     responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     ubicacion = models.CharField(max_length=20, choices=UBICACION_CHOICES)
     creado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='tickets_creados')
+    email_solicitante = models.EmailField(max_length=254, null=True, blank=True, default=None)
+    solucion = models.TextField(null=True, blank=True, default=None)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.asunto} ({self.get_estado_display()})"
