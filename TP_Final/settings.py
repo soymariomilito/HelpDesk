@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-99f65x6@c7mqok*y+ixu@tc3uq(2u*i(y!a*^)aj_5(8)00_7(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['outletnew47.ddns.net']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -149,3 +149,5 @@ AUTHENTICATION_BACKENDS = [
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_TZ = True
+
+CSRF_TRUSTED_ORIGINS = []

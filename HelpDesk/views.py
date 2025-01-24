@@ -94,7 +94,7 @@ def ticket_detail(request, pk):
                 subject=f"Nuevo comentario: {ticket.asunto}",
                 message=plain_message,
                 from_email='sistemas@47-street.com.ar',  
-                recipient_list=[ticket.email_solicitante],
+                recipient_list=[ticket.email_solicitante,'sistemas@47-street.com.ar'],
                 html_message=html_message,
             )
 
@@ -127,7 +127,7 @@ def new_ticket(request):
                 subject=f"Solicitud recibida: {ticket.asunto}",
                 message=plain_message,
                 from_email='sistemas@47-street.com.ar',  
-                recipient_list=[ticket.email_solicitante],
+                recipient_list=[ticket.email_solicitante,'sistemas@47-street.com.ar'],
                 html_message=html_message,
                 fail_silently=False,
             )
@@ -274,6 +274,7 @@ def en_atencion(request, pk):
     
     return redirect('ticket_detail', pk=pk)
 
+@login_required
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)

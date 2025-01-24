@@ -66,12 +66,24 @@ class SolucionForm(forms.ModelForm):
         }
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(
+        max_length=30,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Nombre"
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Contraseña"
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Confirmar Contraseña"
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['first_name', 'username', 'email', 'password']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
@@ -92,3 +104,11 @@ class UserRegistrationForm(forms.ModelForm):
 
         if password and confirm_password and password != confirm_password:
             raise ValidationError("Las contraseñas no coinciden.")
+
+    def save(self, commit=True):
+        # Guardar el usuario con los datos del formulario
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])  # Encripta la contraseña
+        if commit:
+            user.save()
+        return user

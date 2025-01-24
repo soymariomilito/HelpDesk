@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-6">
             <h1>{{ ticket.asunto }}</h1><p><strong>ID:</strong> {{ ticket.id }}</p>
-            <p class="text-break"><strong>Descripción:</strong> {{ ticket.descripcion }}</p>
+            <p class="text-break"><strong>Descripción:</strong> {{ ticket.descripcion|linebreaks }}</p>
             <p><strong>Estado:</strong> {{ ticket.get_estado_display }}</p>
             <p><strong>Prioridad:</strong> {{ ticket.get_prioridad_display }}</p>
             <p><strong>Responsable:</strong>
@@ -23,7 +23,7 @@
             <p><strong>Solicitante:</strong> {{ ticket.email_solicitante }}</p>
             <p><strong>Solución:</strong>
                 {% if ticket.solucion %}
-                    {{ ticket.solucion }}
+                    {{ ticket.solucion|linebreaks }}
                 {% else %}
                     Pendiente
                 {% endif %}
@@ -87,7 +87,7 @@
             <ul class="list-group mb-3">
                 {% for comentario in comentarios %}
                     <li class="list-group-item">
-                        <p class="text-break"><strong>{{ comentario.usuario.username }}:</strong> {{ comentario.texto }}</p>
+                        <p class="text-break"><strong>{{ comentario.usuario.first_name }}:</strong> {{ comentario.texto|linebreaks }}</p>
                         <small class="text-muted">{{ comentario.fecha_comentario }}</small>
                     </li>
                 {% empty %}
@@ -110,8 +110,8 @@
                 <form id="cerrarCasoForm" method="post" action="{% url 'cerrar_ticket' ticket.pk %}">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="solucion" class="form-label">Describe la solución:</label>
-                        <textarea name="solucion" id="solucion" class="form-control" rows="4" placeholder="Escribe la solución aquí..." required></textarea>
+                        <label for="solucion" class="form-label">Describe la soluciÃ³n:</label>
+                        <textarea name="solucion" id="solucion" class="form-control" rows="4" placeholder="Escribe la soluciÃ³n aquÃ­..." required></textarea>
                     </div>
                     <button type="submit" class="btn btn-danger">Confirmar y Cerrar Caso</button>
                 </form>

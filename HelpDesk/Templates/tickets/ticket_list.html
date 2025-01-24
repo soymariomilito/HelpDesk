@@ -147,7 +147,7 @@
                     <a class="page-link" href="?page={{ pagina_actual.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Siguiente</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Última</a>
+                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Ãšltima</a>
                 </li>
             {% endif %}
         </ul>
