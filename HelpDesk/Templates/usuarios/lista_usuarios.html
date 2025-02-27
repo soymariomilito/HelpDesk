@@ -1,0 +1,32 @@
+{% extends "base.html" %}  
+
+{% block title %}Lista de Usuarios{% endblock %} 
+
+{% block content %}  
+    <h1>Lista de Usuarios</h1>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Activo</th>
+                <th>Staff</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr onclick= "window.location.href='{% url 'editar_usuario' usuario.id %}';" style="cursor: pointer;">
+                    <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.is_active|yesno:"Sí,No" }}</td>
+                    <td>{{ usuario.is_staff|yesno:"Sí,No" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end">
+        <a href="{% url 'register' %}" class="btn btn-dark mb-3">Nuevo Usuario</a>
+    </div>
+{% endblock %}

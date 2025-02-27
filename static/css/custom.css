@@ -1,0 +1,58 @@
+/* custom.css */
+
+body {
+    /* Puedes establecer un fondo base si lo deseas */
+    background-color: #f8f9fa;
+    position: relative;
+    overflow-x: hidden; /* Evita barras de scroll indeseadas por el pseudo-elemento */
+  }
+  
+  body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('/static/images/LOGO 47 STREET-02.jpg') repeat; /* Asegúrate de ajustar la ruta a tu imagen */
+    background-size: 80px auto;  /* Ajusta el tamaño según lo deseado */
+    transform: rotate(-45deg);
+    transform-origin: center;
+    opacity: 0.5; /* Ajusta la opacidad según lo deseado */
+    z-index: -1;
+  }
+  
+  .container, .container-sm {
+    background: whitesmoke;
+}
+
+.bg-light {
+    --bs-bg-opacity: 0.8;
+    background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.fixed-carousel-image {
+  max-height: 750px; /* altura fija */
+  max-width: 100%;
+  object-fit: contain; /* recorta la imagen para que llene el contenedor sin distorsionar */
+}
+
+.min-vh-75 {
+  min-height: 75vh;
+}
+
+
+.logo-style {
+  font-family: "Varela", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.s-style {
+  font-family: "Epilogue", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+

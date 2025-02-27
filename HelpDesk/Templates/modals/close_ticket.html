@@ -1,0 +1,21 @@
+<!-- Modal para cerrar el caso -->
+<div class="modal fade" id="cerrarCasoModal" tabindex="-1" aria-labelledby="cerrarCasoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cerrarCasoModalLabel">Cerrar Ticket</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="cerrarCasoForm" method="post" action="{% url 'cerrar_ticket' ticket.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="solucion" class="form-label">Describe la solución:</label>
+                        <textarea name="solucion" id="solucion" class="form-control" rows="4" placeholder="Escribe la solución aquí­..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Confirmar y Cerrar Caso</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

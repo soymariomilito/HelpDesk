@@ -3,7 +3,25 @@
 {% block title %}Lista de Tickets{% endblock %} 
 
 {% block content %}  
+
     <h1>Lista de Tickets</h1>
+    {% if user.grupos.all %}
+        <div class="mb-3">
+            {% for grupo in user.grupos.all %}
+                {% if ver_grupo == grupo.id|stringformat:"s" %}
+                    <a href="?ver_grupo=false{% for key, value in request.GET.items %}{% if key != 'ver_grupo' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" 
+                    class="btn btn-dark mb-3">
+                        Ver Mis Tickets
+                    </a>
+                {% else %}
+                    <a href="?ver_grupo={{ grupo.id }}{% for key, value in request.GET.items %}{% if key != 'ver_grupo' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" 
+                    class="btn btn-dark mb-3">
+                        Ver Tickets de {{ grupo.nombre }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+      </div>
+    {% endif %}
     
      <!-- Formulario de filtro -->
      <form method="get" class="form-inline mb-3">
@@ -12,10 +30,10 @@
         {{ form.prioridad }}
         {{ form.ubicacion }}
         {{ form.responsable }}
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-dark">Filtrar</button>
     </form>
      <!-- Tabla con casos -->
-    <table class="table table-striped table-hover table table-bordered">
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
                 <th>
@@ -104,7 +122,6 @@
                 </th>
             </tr>
         </thead>
-        
         <tbody>
             {% for ticket in pagina_actual %}
                 <tr onclick= "window.location.href='{% url 'ticket_detail' ticket.id %}';" style="cursor: pointer;">
@@ -112,7 +129,7 @@
                     <td class="text-truncate" style="max-width: 300px;">{{ ticket.asunto }}</td>
                     <td>{{ ticket.get_estado_display }}</td>
                     <td>{{ ticket.get_prioridad_display }}</td>
-                    <td>{{ ticket.get_ubicacion_display }}</td>
+                    <td>{{ ticket.ubicacion }}</td>
                     <td>
                         {% if ticket.responsable %}
                             {{ ticket.responsable.username }}
@@ -125,9 +142,8 @@
             {% endfor %}
         </tbody>
     </table>
-
      <!-- Navegacion por paginas -->
-    <nav aria-label="Paginas">
+    <nav aria-label="Paginas" class="d-flex justify-content-between">
         <ul class="pagination">
             {% if pagina_actual.has_previous %}
                 <li class="page-item">
@@ -137,20 +153,20 @@
                     <a class="page-link" href="?page={{ pagina_actual.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Anterior</a>
                 </li>
             {% endif %}
-
             <li class="page-item active">
                 <span class="page-link">{{ pagina_actual.number }} de {{ pagina_actual.paginator.num_pages }}</span>
             </li>
-
             {% if pagina_actual.has_next %}
                 <li class="page-item">
                     <a class="page-link" href="?page={{ pagina_actual.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Siguiente</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Ãšltima</a>
+                    <a class="page-link" href="?page={{ pagina_actual.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Última</a>
                 </li>
             {% endif %}
         </ul>
-    </nav>
-    <a href="{% url 'new_ticket' %}" class="btn btn-success mb-3">Crear Nuevo Ticket</a>
-{% endblock %}
+        <div>
+            <a href="{% url 'new_ticket' %}" class="btn btn-dark ml-3 mb-3">Crear Nuevo Ticket</a> 
+        </div>
+        </nav>
+    {% endblock %}

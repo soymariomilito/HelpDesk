@@ -1,0 +1,48 @@
+<!-- Modal para visualizar archivos adjuntos -->
+<div class="modal fade" id="archivosModal" tabindex="-1" aria-labelledby="archivosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="d-flex flex-column">
+                <h5 class="modal-title" id="archivosModalLabel">Archivos Adjuntos</h5>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="carouselArchivos" class="carousel slide">
+            <div class="carousel-inner">
+                {% for archivo in ticket.archivos_adjuntos.all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        {% if archivo.archivo.url|slice:"-4:" == ".pdf" %}
+                            <div class="d-flex flex-column align-items-center justify-content-center" style="height:400px;">
+                                <!-- Ícono de PDF (requiere Bootstrap Icons) -->
+                                <i class="bi bi-file-earmark-pdf" style="font-size: 4rem; color: red;"></i>
+                                <p>{{ archivo.archivo.name|cut:"tickets/" }}</p>
+                                <!-- Botón para descargar el PDF -->
+                                <a href="{{ archivo.archivo.url }}" class="btn btn-primary mt-2" download>Descargar PDF</a>
+                            </div>
+                        {% else %}
+                            <img src="{{ archivo.archivo.url }}" class="d-block w-100 fixed-carousel-image" alt="Archivo adjunto">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselArchivos" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselArchivos" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Siguiente</span>
+            </button>
+          </div>
+          <div class="d-flex justify-content-end mb-1">
+            <a href="{% url 'add_attachment' ticket.pk %}" class="btn btn-success mt-3">
+              Agregar Archivos
+            </a>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
