@@ -1,89 +1,114 @@
-{% extends "base.html" %}  
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Ticket {{ticket.id}}{% endblock %} 
+{% block title %}Ticket {{ ticket.id }}{% endblock %}
 
-{% block content %}  
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h1>{{ ticket.asunto }}</h1><p><strong>ID:</strong> {{ ticket.id }}</p>
-            <p><strong>Descripción:</strong> {{ ticket.descripcion }}</p>
-            <p><strong>Estado:</strong> {{ ticket.get_estado_display }}</p>
-            <p><strong>Prioridad:</strong> {{ ticket.get_prioridad_display }}</p>
-            <p><strong>Responsable:</strong>
-                {% if ticket.responsable %}
-                    {{ ticket.responsable.username }}
-                {% else %}
-                    Sin asignar
-                {% endif %}
-            </p>
-            <p><strong>Ubicación:</strong> {{ ticket.get_ubicacion_display }}</p>
-            <p><strong>Creado por:</strong> {{ ticket.creado_por }}</p>
-
-            {% if messages %}
-                <div>
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            {% if not ticket.responsable %} 
-                <form action="{% url 'tomar_ticket' ticket.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Tomar caso</button>
-                </form>
-            {% endif %}
-
-            <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Volver a la lista</a>
-            
-            {% if ticket.responsable == user %}
-                {% if ticket.estado != 'CE' %}
-                    <form action="{% url 'cerrar_ticket' ticket.pk %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Cerrar caso</button>
-                    </form>
-                    {% if ticket.estado != 'ES' %}
-                        <form action="{% url 'esperando' ticket.pk %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-warning">Esperando 3ro</button>
-                        </form>
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-
-            {% if ticket.estado == 'CE' %}
-                <form action="{% url 'reabrir_ticket' ticket.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success">Reabrir caso</button>
-                </form>
-            {% endif %}
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <!-- Tarjeta con los datos del Ticket -->
+    <div class="col-md-6 mb-4 mt-3">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">{{ ticket.asunto }}</h3>
+          {% if ticket.archivos_adjuntos.all %}
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#archivosModal">
+              Ver Archivos
+            </button>
+          {% else %}
+            <a href="{% url 'add_attachment' ticket.pk %}" class="btn btn-success">
+              Cargar Archivos
+            </a>
+          {% endif %}
         </div>
-
-        <!-- Comentarios -->
-        <div class="col-md-6">
-            <form method="post" action="{% url 'ticket_detail' ticket.pk %}">
-                {% csrf_token %}
-                {{ comentario_form|crispy }}
-                <button type="submit" class="btn btn-success">Agregar Comentario</button>
+        <div class="card-body">
+          <p><strong>ID:</strong> {{ ticket.id }}</p>
+          <p class="text-break"><strong>Descripción:</strong><br>{{ ticket.descripcion|linebreaks }}</p>
+          <p><strong>Estado:</strong> {{ ticket.get_estado_display }}</p>
+          <p><strong>Prioridad:</strong> {{ ticket.get_prioridad_display }}</p>
+          <p><strong>Responsable:</strong>
+            {% if ticket.responsable %}
+              {{ ticket.responsable.username }}
+            {% else %}
+              Sin asignar
+            {% endif %}
+          </p>
+          <p><strong>Ubicación:</strong> {{ ticket.get_ubicacion_display }}</p>
+          <p><strong>Solicitante:</strong> {{ ticket.email_solicitante }}</p>
+          <p><strong>Solución:</strong>
+            {% if ticket.solucion %}
+              {{ ticket.solucion|linebreaks }}
+            {% else %}
+              Pendiente
+            {% endif %}
+          </p>
+        </div>
+        <div class="card-footer d-flex flex-wrap justify-content-end gap-2">
+          {% if not ticket.responsable and user.is_staff %}
+            <form action="{% url 'tomar_ticket' ticket.pk %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Tomar caso</button>
             </form>
-            <h3>Comentarios</h3>
-            <ul class="list-group mb-3">
-                {% for comentario in comentarios %}
-                    <li class="list-group-item">
-                        <p><strong>{{ comentario.usuario.username }}:</strong> {{ comentario.texto }}</p>
-                        <small class="text-muted">{{ comentario.fecha_comentario }}</small>
-                    </li>
-                {% empty %}
-                    <li class="list-group-item">No hay comentarios todavía.</li>
-                {% endfor %}
-            </ul>
-            
+          {% endif %}
+          <a href="{% url 'ticket_list' %}" class="btn btn-secondary">Volver a la lista</a>
+          {% if ticket.responsable == user %}
+            {% if ticket.estado != 'CE' %}
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cerrarCasoModal">
+                Cerrar caso
+              </button>
+            {% endif %}
+            {% if ticket.estado == 'EN' %}
+              <form action="{% url 'esperando' ticket.pk %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">Esperando 3ro</button>
+              </form>
+            {% endif %}
+            {% if ticket.estado == 'ES' %}
+              <form action="{% url 'atencion' ticket.pk %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">En Atención</button>
+              </form>
+            {% endif %}
+          {% endif %}
+          {% if ticket.estado == 'CE' and user.is_staff %}
+            <form action="{% url 'reabrir_ticket' ticket.pk %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success">Reabrir caso</button>
+            </form>
+          {% endif %}
         </div>
+      </div>
     </div>
+
+    <!-- Tarjeta de Comentarios -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm mt-3">
+        <div class="card-header">
+          <h4 class="mb-0">Comentarios</h4>
+        </div>
+        <div class="card-body">
+          <form method="post" action="{% url 'ticket_detail' ticket.pk %}">
+            {% csrf_token %}
+            {{ comentario_form|crispy }}
+            <button type="submit" class="btn btn-dark mt-2">Agregar Comentario</button>
+          </form>
+          <hr>
+          <ul class="list-group list-group-flush">
+            {% for comentario in comentarios %}
+              <li class="list-group-item">
+                <p class="mb-1"><strong>{{ comentario.usuario.first_name }}:</strong> {{ comentario.texto|linebreaks }}</p>
+                <small class="text-muted">{{ comentario.fecha_comentario }}</small>
+              </li>
+            {% empty %}
+              <li class="list-group-item">No hay comentarios todavía.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+{% include 'modals/close_ticket.html' %}
+{% include 'modals/archivos_modal.html' %}
 {% endblock %}

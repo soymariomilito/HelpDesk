@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Registro Completado{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Registro Completado</h2>
+    <p>Se ha enviado un enlace de confirmacion a <strong>{{ email }}</strong>.</p>
+    <a href="{% url 'ticket_list' %}" class="btn btn-primary mt-3">Volver a la lista</a>
+</div>
+{% endblock %}

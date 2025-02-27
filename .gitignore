@@ -1,20 +1,25 @@
 # Python
+*.pyc
 __pycache__/
-*.py[cod]
-*.sqlite3
 
-# Django
-*.log
+# Entorno virtual
+venv/
+django_env/
+
+# Bases de datos
+db.sqlite3
+
+# Archivos de migraciones de Django
+*/migrations/*
+*/migrations/__pycache__/
+
+# Archivos de configuración sensibles
+.env
+
+# Archivos estáticos
 staticfiles/
 media/
 
-# Virtual environment
-venv/
-env/
-
-# IDE/Editor
+# Configuración de IDEs
 .vscode/
-*.swp
-
-# Secrets
-*.env
+.idea/

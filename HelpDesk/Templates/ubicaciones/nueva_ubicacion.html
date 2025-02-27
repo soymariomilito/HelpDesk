@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Nueva Ubicación{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Nueva Ubicación</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Campo Nombre -->
+        <div class="mb-3">
+            <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre</label>
+            {{ form.nombre }}
+            {% if form.nombre.errors %}
+                <div class="text-danger">
+                    {{ form.nombre.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Activo -->
+        <div class="mb-3 form-check">
+            {{ form.activo }}
+            <label for="{{ form.activo.id_for_label }}" class="form-check-label">Activo</label>
+            {% if form.activo.errors %}
+                <div class="text-danger">
+                    {{ form.activo.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Supervisora -->
+        <div class="mb-3">
+            <label for="{{ form.supervisora.id_for_label }}" class="form-label">Supervisora</label>
+            {{ form.supervisora }}
+            {% if form.supervisora.errors %}
+                <div class="text-danger">
+                    {{ form.supervisora.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Usuario Predeterminado -->
+        <div class="mb-3">
+            <label for="{{ form.usuario_predeterminado.id_for_label }}" class="form-label">Usuario Predeterminado</label>
+            {{ form.usuario_predeterminado }}
+            {% if form.usuario_predeterminado.errors %}
+                <div class="text-danger">
+                    {{ form.usuario_predeterminado.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-success mb-3">Guardar</button>
+        <a href="{% url 'lista_ubicaciones' %}" class="btn btn-secondary mb-3">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .content {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+
+        <p>Hola {{ user.username }},</p>
+
+        <p>Gracias por registrarte en nuestro sistema de soporte. Haz clic en el siguiente enlace para confirmar tu cuenta:</p>
+
+        <a href="http://{{ domain }}{% url 'activate_account' uidb64=uid token=token %}" class="btn btn-primary mt-3">Confirma tu cuenta</a>
+        
+        {% include "emails/firma.html" %}
+    </div>
+
+</body>
+</html>

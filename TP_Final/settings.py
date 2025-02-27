@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -131,3 +134,76 @@ LOGIN_URL = '/login/'  # Esta es la URL a la que se redirigirá a los usuarios n
 LOGIN_REDIRECT_URL = '/'  # Redirige al usuario a la página principal después de iniciar sesión
 LOGOUT_REDIRECT_URL = '/login/'  # Redirige a la página de inicio de sesión después de cerrar sesión
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+#Envío de mails
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+# Configurar el tiempo de expiración del token en segundos (por ejemplo, 24 horas)
+PASSWORD_RESET_TIMEOUT = 84600
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Backend predeterminado de Django
+]
+
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
+USE_TZ = True
+
+CSRF_TRUSTED_ORIGINS = []
+
+# Archivos estáticos
+STATIC_URL = '/static/'  # URL para acceder a archivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Carpeta para recolectar estáticos en producción
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Apunta a la carpeta 'static' en el mismo nivel que manage.py
+]
+
+# Archivos subidos por usuarios
+MEDIA_URL = '/media/'  # URL para acceder a los archivos subidos
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Carpeta donde se guardarán los archivos subidos
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': BASE_DIR / 'logs/helpdesk.log',
+            'when': 'midnight',         
+            'backupCount': 7,           
+            'formatter': 'verbose'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'HelpDesk': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    }
+}

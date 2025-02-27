@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Registro</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Campo First Name -->
+        <div class="mb-3">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">Nombre</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div class="text-danger">
+                    {{ form.first_name.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Username -->
+        <div class="mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label">Nombre de Usuario</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="text-danger">
+                    {{ form.username.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Email -->
+        <div class="mb-3">
+            <label for="{{ form.email.id_for_label }}" class="form-label">Correo Electrónico</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="text-danger">
+                    {{ form.email.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="mb-3">
+            <label for="{{ form.password.id_for_label }}" class="form-label">Contraseña</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div class="text-danger">
+                    {{ form.password.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Campo Confirmar Contraseña -->
+        <div class="mb-3">
+            <label for="{{ form.confirm_password.id_for_label }}" class="form-label">Confirmar Contraseña</label>
+            {{ form.confirm_password }}
+            {% if form.confirm_password.errors %}
+                <div class="text-danger">
+                    {{ form.confirm_password.errors }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary mb-3">Registrarse</button>
+        <a href="{% url 'ticket_list' %}" class="btn btn-secondary mb-3">Volver a la lista</a>
+    </form>
+</div>
+{% endblock %}
